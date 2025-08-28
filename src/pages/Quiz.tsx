@@ -30,6 +30,16 @@ const sampleQuestions = {
         "Não há diferença significativa"
       ],
       correctAnswer: 2
+    },
+    {
+      question: "O que acontece quando você declara uma variável como 'final' em Java?",
+      options: [
+        "A variável pode ser modificada apenas uma vez",
+        "A variável não pode ser reatribuída após inicialização",
+        "A variável se torna estática automaticamente",
+        "A variável só pode ser usada dentro do método"
+      ],
+      correctAnswer: 1
     }
   ],
   python: [
@@ -45,6 +55,16 @@ func(my_list)
 print(my_list)`,
       options: ["[1, 2, 3]", "[1, 2, 3, 4]", "[1, 2, 3, 5]", "[1, 2, 3, 4, 5]"],
       correctAnswer: 1
+    },
+    {
+      question: "Qual é a diferença entre '==' e 'is' em Python?",
+      options: [
+        "Não há diferença, são sinônimos",
+        "'==' compara valores, 'is' compara identidade de objeto",
+        "'is' é mais rápido que '=='",
+        "'==' só funciona com strings"
+      ],
+      correctAnswer: 1
     }
   ],
   sql: [
@@ -52,6 +72,16 @@ print(my_list)`,
       question: "Qual comando SQL é usado para remover uma tabela completamente?",
       options: ["DELETE TABLE", "REMOVE TABLE", "DROP TABLE", "CLEAR TABLE"],
       correctAnswer: 2
+    },
+    {
+      question: "Qual a diferença entre INNER JOIN e LEFT JOIN?",
+      options: [
+        "INNER JOIN retorna apenas registros com correspondência em ambas tabelas",
+        "LEFT JOIN é mais rápido que INNER JOIN",
+        "Não há diferença prática",
+        "INNER JOIN só funciona com chaves primárias"
+      ],
+      correctAnswer: 0
     }
   ],
   javascript: [
@@ -59,8 +89,28 @@ print(my_list)`,
       question: "Qual será o resultado de '5' + 3 em JavaScript?",
       options: ["8", "'53'", "53", "Erro"],
       correctAnswer: 1
+    },
+    {
+      question: "O que é 'hoisting' em JavaScript?",
+      options: [
+        "Um método para otimizar o código",
+        "Declarações são movidas para o topo do escopo",
+        "Uma forma de criar arrays",
+        "Um tipo de loop"
+      ],
+      correctAnswer: 1
     }
   ]
+};
+
+// Função para embaralhar array
+const shuffleArray = <T,>(array: T[]): T[] => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
 };
 
 export default function Quiz() {
@@ -70,19 +120,27 @@ export default function Quiz() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(30);
   const [quizComplete, setQuizComplete] = useState(false);
+  const [shuffledQuestions, setShuffledQuestions] = useState<any[]>([]);
 
-  const questions = language && language in sampleQuestions 
-    ? sampleQuestions[language as keyof typeof sampleQuestions]
-    : sampleQuestions.java;
+  // Embaralhar questões na inicialização
+  useEffect(() => {
+    const baseQuestions = language && language in sampleQuestions 
+      ? sampleQuestions[language as keyof typeof sampleQuestions]
+      : sampleQuestions.java;
+    
+    setShuffledQuestions(shuffleArray(baseQuestions));
+  }, [language]);
+
+  const questions = shuffledQuestions;
 
   useEffect(() => {
-    if (timeLeft > 0 && !quizComplete) {
+    if (timeLeft > 0 && !quizComplete && questions.length > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
       return () => clearTimeout(timer);
-    } else if (timeLeft === 0) {
+    } else if (timeLeft === 0 && questions.length > 0) {
       handleAnswer(false);
     }
-  }, [timeLeft, quizComplete]);
+  }, [timeLeft, quizComplete, questions.length]);
 
   const handleAnswer = (correct: boolean) => {
     if (correct) {
@@ -166,14 +224,16 @@ export default function Quiz() {
         </div>
 
         {/* Question */}
-        <QuizQuestion
-          question={questions[currentQuestion].question}
-          code={(questions[currentQuestion] as any).code}
-          options={questions[currentQuestion].options}
-          correctAnswer={questions[currentQuestion].correctAnswer}
-          onAnswer={handleAnswer}
-          timeLeft={timeLeft}
-        />
+        {questions.length > 0 && (
+          <QuizQuestion
+            question={questions[currentQuestion]?.question}
+            code={(questions[currentQuestion] as any)?.code}
+            options={questions[currentQuestion]?.options}
+            correctAnswer={questions[currentQuestion]?.correctAnswer}
+            onAnswer={handleAnswer}
+            timeLeft={timeLeft}
+          />
+        )}
       </div>
     </div>
   );

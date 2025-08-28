@@ -38,19 +38,22 @@ export const QuizQuestion = ({
   const getOptionStyle = (index: number) => {
     if (!showResult) {
       return selectedAnswer === index 
-        ? "bg-primary text-primary-foreground" 
-        : "bg-card hover:bg-muted";
+        ? "bg-primary text-primary-foreground border-primary" 
+        : "bg-card hover:bg-muted border-border";
     }
     
+    // Resposta correta sempre em verde
     if (index === correctAnswer) {
-      return "bg-success text-success-foreground";
+      return "bg-green-500/20 text-green-700 border-green-500 dark:bg-green-500/30 dark:text-green-400";
     }
     
+    // Resposta errada selecionada em vermelho
     if (index === selectedAnswer && index !== correctAnswer) {
-      return "bg-destructive text-destructive-foreground";
+      return "bg-red-500/20 text-red-700 border-red-500 dark:bg-red-500/30 dark:text-red-400";
     }
     
-    return "bg-muted";
+    // Outras opções em cinza quando mostrando resultado
+    return "bg-muted/50 text-muted-foreground border-muted";
   };
 
   return (
@@ -78,11 +81,11 @@ export const QuizQuestion = ({
       {/* Options */}
       <div className="space-y-3">
         {options.map((option, index) => (
-          <Button
+            <Button
             key={index}
             onClick={() => handleAnswer(index)}
             variant="outline"
-            className={`w-full p-4 text-left justify-start min-h-[60px] ${getOptionStyle(index)} transition-all duration-300`}
+            className={`w-full p-4 text-left justify-start min-h-[60px] border-2 ${getOptionStyle(index)} transition-all duration-500 transform ${showResult && index === correctAnswer ? 'scale-102' : ''}`}
             disabled={showResult}
           >
             <div className="flex items-center gap-3">
@@ -91,10 +94,10 @@ export const QuizQuestion = ({
               </span>
               <span className="flex-1">{option}</span>
               {showResult && index === correctAnswer && (
-                <CheckCircle className="w-5 h-5 text-success" />
+                <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 animate-scale-in" />
               )}
               {showResult && index === selectedAnswer && index !== correctAnswer && (
-                <XCircle className="w-5 h-5 text-destructive" />
+                <XCircle className="w-5 h-5 text-red-600 dark:text-red-400 animate-scale-in" />
               )}
             </div>
           </Button>
