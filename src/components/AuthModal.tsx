@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -11,17 +9,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { Eye, EyeOff } from "lucide-react";
+import { LanguageSelector } from "./LanguageSelector";
 
-const languages = [
-  { value: "javascript", label: "JavaScript" },
-  { value: "python", label: "Python" },
-  { value: "java", label: "Java" },
-  { value: "csharp", label: "C#" },
-  { value: "php", label: "PHP" },
-  { value: "ruby", label: "Ruby" },
-  { value: "go", label: "Go" },
-  { value: "swift", label: "Swift" }
-];
 
 const signUpSchema = z.object({
   email: z.string().email("Email inválido"),
@@ -186,24 +175,10 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
                 control={signUpForm.control}
                 name="mainLanguage"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Linguagem Principal</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione sua linguagem favorita" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {languages.map((lang) => (
-                          <SelectItem key={lang.value} value={lang.value}>
-                            {lang.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
+                  <LanguageSelector
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
                 )}
               />
 

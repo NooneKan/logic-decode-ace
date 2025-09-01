@@ -56,7 +56,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      <GameHeader score={userScore} level={userLevel} />
+      <GameHeader 
+        score={userScore} 
+        level={userLevel} 
+        onLoginClick={() => setShowAuthModal(true)} 
+      />
       
       <main className="p-4 space-y-6">
         {/* Welcome Section */}

@@ -1,4 +1,4 @@
-import { Trophy, Settings, User, LogOut } from "lucide-react";
+import { Trophy, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -9,9 +9,10 @@ import deciframLogo from "@/assets/decifra-logo.png";
 interface GameHeaderProps {
   score?: number;
   level?: number;
+  onLoginClick?: () => void;
 }
 
-export const GameHeader = ({ score = 0, level = 1 }: GameHeaderProps) => {
+export const GameHeader = ({ score = 0, level = 1, onLoginClick }: GameHeaderProps) => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
@@ -57,7 +58,7 @@ export const GameHeader = ({ score = 0, level = 1 }: GameHeaderProps) => {
               <DropdownMenuGroup>
                 <DropdownMenuItem onClick={() => navigate("/profile")}>
                   <User className="mr-2 h-4 w-4" />
-                  <span>Minhas Pontuações</span>
+                  <span>Meu Perfil</span>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
@@ -68,9 +69,15 @@ export const GameHeader = ({ score = 0, level = 1 }: GameHeaderProps) => {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <Button variant="ghost" size="icon" className="w-10 h-10">
-            <Settings className="w-5 h-5" />
-          </Button>
+          onLoginClick && (
+            <Button 
+              variant="ghost" 
+              onClick={onLoginClick}
+              className="text-sm font-medium hover:bg-accent"
+            >
+              Login
+            </Button>
+          )
         )}
       </div>
     </header>
