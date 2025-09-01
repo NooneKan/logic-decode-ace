@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { GameHeader } from "@/components/GameHeader";
 import { LanguageCard } from "@/components/LanguageCard";
+import { AuthModal } from "@/components/AuthModal";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { Play, BookOpen } from "lucide-react";
+import { Play, BookOpen, LogIn } from "lucide-react";
 import deciframLogo from "@/assets/decifra-logo.png";
 
 const languages = [
@@ -43,8 +45,10 @@ const languages = [
 
 export default function Home() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [userScore] = useState(1250);
   const [userLevel] = useState(5);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const handleLanguageSelect = (languageId: string) => {
     navigate(`/quiz/${languageId}`);
@@ -70,6 +74,16 @@ export default function Home() {
           <p className="text-muted-foreground max-w-md mx-auto">
             Aprimore sua lógica de programação com desafios interativos em diversas linguagens
           </p>
+          
+          {!user && (
+            <Button 
+              onClick={() => setShowAuthModal(true)}
+              className="mt-4 bg-gradient-primary hover:shadow-glow"
+            >
+              <LogIn className="w-4 h-4 mr-2" />
+              Entrar ou Cadastrar-se
+            </Button>
+          )}
         </div>
 
         {/* Quick Start Button */}
@@ -121,6 +135,8 @@ export default function Home() {
           </div>
         </div>
       </main>
+
+      <AuthModal open={showAuthModal} onOpenChange={setShowAuthModal} />
     </div>
   );
 }

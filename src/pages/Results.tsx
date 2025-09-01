@@ -1,16 +1,60 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Trophy, Target, RotateCcw, Home, Star } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import { useEffect, useState } from "react";
 
 export default function Results() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const [saved, setSaved] = useState(false);
   
   const { score = 0, totalQuestions = 0, language = "" } = location.state || {};
   
   const correctAnswers = Math.floor(score / 100);
   const percentage = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
+
+  // Salvar pontuação se usuário estiver logado
+  useEffect(() => {
+    const saveScore = async () => {
+      if (user && !saved && score > 0) {
+        try {
+          const { error } = await supabase
+            .from('scores')
+            .insert({
+              user_id: user.id,
+              language: language,
+              score: score,
+              accuracy: percentage,
+              total_questions: totalQuestions
+            });
+
+          if (error) {
+            console.error('Error saving score:', error);
+            toast({
+              title: "Erro ao salvar pontuação",
+              description: "Não foi possível salvar sua pontuação.",
+              variant: "destructive",
+            });
+          } else {
+            setSaved(true);
+            toast({
+              title: "Pontuação salva!",
+              description: "Sua pontuação foi salva no seu perfil.",
+            });
+          }
+        } catch (error) {
+          console.error('Error saving score:', error);
+        }
+      }
+    };
+
+    saveScore();
+  }, [user, saved, score, language, percentage, totalQuestions]);
   
   const getPerformanceMessage = () => {
     if (percentage >= 90) return { message: "Excelente!", color: "text-success", stars: 3 };
@@ -61,6 +105,12 @@ export default function Results() {
           <p className="text-muted-foreground">
             Quiz de {getLanguageTitle()} concluído
           </p>
+          
+          {user && (
+            <p className="text-xs text-muted-foreground mt-2">
+              {saved ? "✓ Pontuação salva no seu perfil" : "Salvando pontuação..."}
+            </p>
+          )}
         </div>
 
         {/* Results Card */}
