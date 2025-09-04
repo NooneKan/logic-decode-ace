@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { QuizQuestion } from "@/components/QuizQuestion";
 import { GameHeader } from "@/components/GameHeader";
@@ -133,6 +133,32 @@ export default function Quiz() {
 
   const questions = shuffledQuestions;
 
+  const handleAnswer = useCallback((correct: boolean) => {
+    setScore(prevScore => {
+      const newScore = correct ? prevScore + 100 : prevScore;
+      
+      if (currentQuestion + 1 < questions.length) {
+        setTimeout(() => {
+          setCurrentQuestion(currentQuestion + 1);
+          setTimeLeft(30);
+        }, 1000);
+      } else {
+        setQuizComplete(true);
+        setTimeout(() => {
+          navigate('/results', { 
+            state: { 
+              score: newScore, 
+              totalQuestions: questions.length,
+              language: language 
+            } 
+          });
+        }, 2000);
+      }
+      
+      return newScore;
+    });
+  }, [currentQuestion, questions.length, language, navigate]);
+
   useEffect(() => {
     if (timeLeft > 0 && !quizComplete && questions.length > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
@@ -140,31 +166,7 @@ export default function Quiz() {
     } else if (timeLeft === 0 && questions.length > 0) {
       handleAnswer(false);
     }
-  }, [timeLeft, quizComplete, questions.length]);
-
-  const handleAnswer = (correct: boolean) => {
-    if (correct) {
-      setScore(score + 100);
-    }
-
-    if (currentQuestion + 1 < questions.length) {
-      setTimeout(() => {
-        setCurrentQuestion(currentQuestion + 1);
-        setTimeLeft(30);
-      }, 1000);
-    } else {
-      setQuizComplete(true);
-      setTimeout(() => {
-        navigate('/results', { 
-          state: { 
-            score, 
-            totalQuestions: questions.length,
-            language: language 
-          } 
-        });
-      }, 2000);
-    }
-  };
+  }, [timeLeft, quizComplete, questions.length, handleAnswer]);
 
   const getLanguageTitle = () => {
     const titles = {
