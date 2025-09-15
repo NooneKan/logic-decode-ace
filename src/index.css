@@ -2,13 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+
 
 @layer base {
   :root {
-    /* Decifra Gaming Theme - Dark Tech Colors */
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
 
@@ -18,52 +15,41 @@ All colors MUST be HSL.
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
 
-    /* Electric Blue Primary */
     --primary: 217 91% 60%;
     --primary-foreground: 0 0% 98%;
     --primary-glow: 217 91% 70%;
 
-    /* Purple Secondary */
     --secondary: 259 94% 51%;
     --secondary-foreground: 0 0% 98%;
 
-    /* Dark surfaces */
     --muted: 240 5% 9%;
     --muted-foreground: 240 5% 64.9%;
 
-    /* Cyber Green Accent */
     --accent: 142 76% 36%;
     --accent-foreground: 0 0% 98%;
 
-    /* Error Red */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    /* Borders and inputs */
     --border: 240 5% 20%;
     --input: 240 5% 15%;
     --ring: 217 91% 60%;
 
-    /* Success Green */
     --success: 142 76% 36%;
     --success-foreground: 0 0% 98%;
 
-    /* Warning Orange */
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 98%;
 
-    /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(259 94% 51%));
     --gradient-success: linear-gradient(135deg, hsl(142 76% 36%), hsl(120 100% 25%));
     --gradient-card: linear-gradient(135deg, hsl(240 10% 3.9%), hsl(240 5% 9%));
     --gradient-main: linear-gradient(135deg, hsl(240 10% 3.9%), hsl(240 5% 6%));
     --gradient-warning: linear-gradient(135deg, hsl(38 92% 50%), hsl(25 95% 53%));
     
-    /* Shadows */
     --shadow-glow: 0 0 30px hsl(217 91% 60% / 0.3);
     --shadow-card: 0 10px 25px hsl(240 10% 3.9% / 0.5);
     
-    /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --radius: 0.75rem;
@@ -86,7 +72,6 @@ All colors MUST be HSL.
   }
 
   .light {
-    /* Light theme for accessibility */
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -123,12 +108,10 @@ All colors MUST be HSL.
     overflow-x: hidden;
   }
   
-  /* Mobile-first responsive design */
   * {
     -webkit-tap-highlight-color: transparent;
   }
   
-  /* Smooth animations */
   .animate-glow {
     animation: glow 2s ease-in-out infinite alternate;
   }

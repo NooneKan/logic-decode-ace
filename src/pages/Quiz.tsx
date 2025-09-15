@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, CheckCircle } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
-// Sample questions - in a real app, these would come from an API
 const sampleQuestions = {
   java: [
     {
