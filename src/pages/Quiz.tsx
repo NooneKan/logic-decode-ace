@@ -122,7 +122,6 @@ export default function Quiz() {
   const [shuffledQuestions, setShuffledQuestions] = useState<any[]>([]);
   const [questionLocked, setQuestionLocked] = useState(false);
 
-  // Embaralhar questões na inicialização
   useEffect(() => {
     const baseQuestions = language && language in sampleQuestions 
       ? sampleQuestions[language as keyof typeof sampleQuestions]
