@@ -111,6 +111,12 @@ const shuffleArray = <T,>(array: T[]): T[] => {
   return shuffled;
 };
 
+// Seleciona 'count' itens únicos aleatórios do array original
+const pickRandom = <T,>(arr: T[], count: number): T[] => {
+  const shuffled = shuffleArray(arr);
+  return shuffled.slice(0, Math.min(count, arr.length));
+};
+
 export default function Quiz() {
   const { language } = useParams<{ language: string }>();
   const navigate = useNavigate();
@@ -132,7 +138,11 @@ export default function Quiz() {
       baseQuestions = sampleQuestions.java as any[];
     }
 
-    const newQuestions = shuffleArray([...baseQuestions]);
+    // Embaralhar e, no modo random, pegar um subconjunto para variar as perguntas
+    const newQuestions = language === 'random'
+      ? pickRandom(baseQuestions, 10)
+      : shuffleArray([...baseQuestions]);
+
     setShuffledQuestions(newQuestions);
 
     // Resetar estado ao iniciar um novo conjunto de questões
@@ -245,6 +255,7 @@ export default function Quiz() {
         {/* Question */}
         {questions.length > 0 && (
           <QuizQuestion
+            key={`${searchParams.get('ts')}-${currentQuestion}`}
             question={questions[currentQuestion]?.question}
             code={(questions[currentQuestion] as any)?.code}
             options={questions[currentQuestion]?.options}
