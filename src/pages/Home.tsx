@@ -51,7 +51,7 @@ export default function Home() {
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   const handleLanguageSelect = (languageId: string) => {
-    navigate(`/quiz/${languageId}`);
+    navigate(`/quiz/${languageId}?ts=${Date.now()}`);
   };
 
   return (
@@ -100,7 +100,7 @@ export default function Home() {
             Questões aleatórias de todas as linguagens
           </p>
           <Button 
-            onClick={() => navigate('/quiz/random')}
+            onClick={() => navigate(`/quiz/random?ts=${Date.now()}`)}
             className="w-full bg-gradient-primary hover:shadow-glow"
           >
             Começar Agora

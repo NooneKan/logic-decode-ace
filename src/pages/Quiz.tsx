@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { QuizQuestion } from "@/components/QuizQuestion";
 import { GameHeader } from "@/components/GameHeader";
 import { Button } from "@/components/ui/button";
@@ -114,6 +114,7 @@ const shuffleArray = <T,>(array: T[]): T[] => {
 export default function Quiz() {
   const { language } = useParams<{ language: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(30);
@@ -140,7 +141,7 @@ export default function Quiz() {
     setTimeLeft(30);
     setQuizComplete(false);
     setQuestionLocked(false);
-  }, [language]);
+  }, [language, searchParams.get('ts')]);
 
   const questions = shuffledQuestions;
 
