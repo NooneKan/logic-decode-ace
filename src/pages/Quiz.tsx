@@ -122,12 +122,24 @@ export default function Quiz() {
   const [questionLocked, setQuestionLocked] = useState(false);
 
   useEffect(() => {
-    const baseQuestions = language && language in sampleQuestions 
-      ? sampleQuestions[language as keyof typeof sampleQuestions]
-      : sampleQuestions.java;
-    
-    // Força o embaralhamento criando uma nova referência
-    setShuffledQuestions([...shuffleArray([...baseQuestions])]);
+    let baseQuestions: any[] = [];
+    if (language === 'random') {
+      baseQuestions = Object.values(sampleQuestions).flat() as any[];
+    } else if (language && language in sampleQuestions) {
+      baseQuestions = sampleQuestions[language as keyof typeof sampleQuestions] as any[];
+    } else {
+      baseQuestions = sampleQuestions.java as any[];
+    }
+
+    const newQuestions = shuffleArray([...baseQuestions]);
+    setShuffledQuestions(newQuestions);
+
+    // Resetar estado ao iniciar um novo conjunto de questões
+    setCurrentQuestion(0);
+    setScore(0);
+    setTimeLeft(30);
+    setQuizComplete(false);
+    setQuestionLocked(false);
   }, [language]);
 
   const questions = shuffledQuestions;
