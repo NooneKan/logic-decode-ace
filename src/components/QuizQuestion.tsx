@@ -36,9 +36,7 @@ export const QuizQuestion = ({
     setShowResult(true);
     
     const isCorrect = answerIndex === correctAnswer;
-    setTimeout(() => {
-      onAnswer(isCorrect);
-    }, 1500);
+    onAnswer(isCorrect);
   };
 
   const getOptionStyle = (index: number) => {

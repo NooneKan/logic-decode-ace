@@ -120,6 +120,7 @@ export default function Quiz() {
   const [timeLeft, setTimeLeft] = useState(30);
   const [quizComplete, setQuizComplete] = useState(false);
   const [shuffledQuestions, setShuffledQuestions] = useState<any[]>([]);
+  const [questionLocked, setQuestionLocked] = useState(false);
 
   // Embaralhar questões na inicialização
   useEffect(() => {
@@ -133,13 +134,18 @@ export default function Quiz() {
   const questions = shuffledQuestions;
 
   const handleAnswer = useCallback((correct: boolean) => {
+    if (questionLocked || quizComplete || questions.length === 0) return;
+
+    setQuestionLocked(true);
+
     setScore(prevScore => {
       const newScore = correct ? prevScore + 100 : prevScore;
       
       if (currentQuestion + 1 < questions.length) {
         setTimeout(() => {
-          setCurrentQuestion(currentQuestion + 1);
+          setCurrentQuestion(prev => prev + 1);
           setTimeLeft(30);
+          setQuestionLocked(false);
         }, 1000);
       } else {
         setQuizComplete(true);
@@ -156,16 +162,16 @@ export default function Quiz() {
       
       return newScore;
     });
-  }, [currentQuestion, questions.length, language, navigate]);
+  }, [currentQuestion, questions.length, language, navigate, questionLocked, quizComplete]);
 
   useEffect(() => {
-    if (timeLeft > 0 && !quizComplete && questions.length > 0) {
+    if (timeLeft > 0 && !quizComplete && questions.length > 0 && !questionLocked) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
       return () => clearTimeout(timer);
-    } else if (timeLeft === 0 && questions.length > 0) {
+    } else if (timeLeft === 0 && questions.length > 0 && !questionLocked) {
       handleAnswer(false);
     }
-  }, [timeLeft, quizComplete, questions.length, handleAnswer]);
+  }, [timeLeft, quizComplete, questions.length, handleAnswer, questionLocked]);
 
   const getLanguageTitle = () => {
     const titles = {
