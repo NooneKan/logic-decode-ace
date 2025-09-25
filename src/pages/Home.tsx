@@ -65,7 +65,7 @@ export default function Home() {
       <main className="p-4 space-y-6">
         {/* Welcome Section */}
         <div className="text-center py-6">
-          <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-glow animate-pulse-slow">
+          <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden bg-gradient-primary shadow-glow animate-pulse-slow">
             <img 
               src={deciframLogo} 
               alt="Decifra Logo" 

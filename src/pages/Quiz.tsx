@@ -126,7 +126,8 @@ export default function Quiz() {
       ? sampleQuestions[language as keyof typeof sampleQuestions]
       : sampleQuestions.java;
     
-    setShuffledQuestions(shuffleArray(baseQuestions));
+    // Força o embaralhamento criando uma nova referência
+    setShuffledQuestions([...shuffleArray([...baseQuestions])]);
   }, [language]);
 
   const questions = shuffledQuestions;

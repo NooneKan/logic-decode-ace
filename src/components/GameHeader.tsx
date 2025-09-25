@@ -23,7 +23,7 @@ export const GameHeader = ({ score = 0, level = 1, onLoginClick }: GameHeaderPro
   return (
     <header className="flex items-center justify-between p-4 bg-gradient-card border-b border-border">
       <div className="flex items-center gap-3">
-        <div className="w-12 h-12 rounded-xl overflow-hidden shadow-glow">
+        <div className="w-12 h-12 rounded-xl overflow-hidden bg-gradient-primary shadow-glow">
           <img 
             src={deciframLogo} 
             alt="Decifra Logo" 
