@@ -54,7 +54,7 @@ export default function Profile() {
     if (!user) return;
 
     try {
-      // Fetch profile
+
       const { data: profileData } = await supabase
         .from('profiles')
         .select('display_name, main_language')
